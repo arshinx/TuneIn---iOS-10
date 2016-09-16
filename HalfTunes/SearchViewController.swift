@@ -131,9 +131,10 @@ class SearchViewController: UIViewController {
     func localFileExistsForTrack(_ track: Track) -> Bool {
         if let urlString = track.previewUrl, let localUrl = localFilePathForUrl(urlString) {
             var isDir : ObjCBool = false
-            if let path = localUrl.path {
-                return FileManager.default.fileExists(atPath: path, isDirectory: &isDir)
-            }
+            let path = localUrl.path
+            
+            return FileManager.default.fileExists(atPath: path, isDirectory: &isDir)
+            
         }
         return false
     }
