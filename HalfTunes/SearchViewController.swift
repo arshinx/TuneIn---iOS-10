@@ -139,11 +139,14 @@ class SearchViewController: UIViewController {
 // MARK: - UISearchBarDelegate
 
 extension SearchViewController: UISearchBarDelegate {
-  func searchBarSearchButtonClicked(searchBar: UISearchBar) {
-    // Dimiss the keyboard
-    dismissKeyboard()
     
-    // TODO
+    
+    func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+        
+        // Dimiss the keyboard
+        dismissKeyboard()
+    
+        
   }
     
   func positionForBar(bar: UIBarPositioning) -> UIBarPosition {
