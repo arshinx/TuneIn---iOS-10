@@ -161,6 +161,9 @@ extension SearchViewController: UISearchBarDelegate {
             // Verify whether string query is properly encoded
             let expectedCharSet = NSCharacterSet.URLQueryAllowedCharacterSet()
             let searchTerm = searchBar.text!.stringByAddingPercentEncodingWithAllowedCharacters(expectedCharSet)!
+            
+            // Create a url object for iTunes Search API
+            let url = NSURL(string: "https://itunes.apple.com/search?media=music&entity=song&term=\(searchTerm)")
         }
   }
     
