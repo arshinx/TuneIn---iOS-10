@@ -164,6 +164,11 @@ extension SearchViewController: UISearchBarDelegate {
             
             // Create a url object for iTunes Search API
             let url = NSURL(string: "https://itunes.apple.com/search?media=music&entity=song&term=\(searchTerm)")
+            
+            // Handle HTTP GET request
+            dataTask = defaultSession.dataTaskWithURL(url!) {
+                
+            }
         }
   }
     
