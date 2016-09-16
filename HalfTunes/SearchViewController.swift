@@ -158,6 +158,9 @@ extension SearchViewController: UISearchBarDelegate {
             // Enable Activity indicator
             UIApplication.sharedApplication().networkActivityIndicatorVisible = true
             
+            // Verify whether string query is properly encoded
+            let expectedCharSet = NSCharacterSet.URLQueryAllowedCharacterSet()
+            let searchTerm = searchBar.text!.stringByAddingPercentEncodingWithAllowedCharacters(expectedCharSet)!
         }
   }
     
