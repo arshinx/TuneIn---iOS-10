@@ -168,6 +168,14 @@ extension SearchViewController: UISearchBarDelegate {
             // Handle HTTP GET request
             dataTask = defaultSession.dataTaskWithURL(url!) {
                 
+                data, response, error in
+                
+                // Hide activity indicator, UI update on main thread!
+                dispatch_async(dispatch_get_main_queue(), { 
+                    
+                    // Hide activity indicator
+                    UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                })
             }
         }
   }
