@@ -154,6 +154,10 @@ extension SearchViewController: UISearchBarDelegate {
                 
                 dataTask?.cancel()
             }
+            
+            // Enable Activity indicator
+            UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+            
         }
   }
     
