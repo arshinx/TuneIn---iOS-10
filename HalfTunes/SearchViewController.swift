@@ -146,7 +146,10 @@ extension SearchViewController: UISearchBarDelegate {
         // Dimiss the keyboard
         dismissKeyboard()
     
-        
+        // Search bar is not empty
+        if !searchBar.text!.isEmpty {
+            
+        }
   }
     
   func positionForBar(bar: UIBarPositioning) -> UIBarPosition {
