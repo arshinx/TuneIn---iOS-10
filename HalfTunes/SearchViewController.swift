@@ -14,7 +14,8 @@ class SearchViewController: UIViewController {
     // NSURLSession object initialized with configuration
     let defaultSession = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
     
-    
+    // When user searches, make HTTP GET requests
+    var dataTask: NSURLSessionDataTask?
 
   @IBOutlet weak var tableView: UITableView!
   @IBOutlet weak var searchBar: UISearchBar!
