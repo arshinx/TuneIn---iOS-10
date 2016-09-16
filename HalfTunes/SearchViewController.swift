@@ -120,7 +120,7 @@ class SearchViewController: UIViewController {
     
         let url = URL(string: previewUrl)
     
-        if let lastPathComponent = url.lastPathComponent {
+        if let lastPathComponent = url?.lastPathComponent {
             let fullPath = documentsPath.appendingPathComponent(lastPathComponent)
             return URL(fileURLWithPath:fullPath)
         }
