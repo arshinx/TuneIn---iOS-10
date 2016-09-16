@@ -149,6 +149,11 @@ extension SearchViewController: UISearchBarDelegate {
         // Search bar is not empty
         if !searchBar.text!.isEmpty {
             
+            // Cancel data tasks should they be available
+            if dataTask != nil {
+                
+                dataTask?.cancel()
+            }
         }
   }
     
