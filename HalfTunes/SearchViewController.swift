@@ -181,9 +181,20 @@ extension SearchViewController: UISearchBarDelegate {
                     UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 })
                 
-                //
+                // If request is successful, parse response and update data in table view
                 if let error = error {
+                    
+                    // Log Error
                     print(error.localizedDescription)
+                    
+                } else if let httpResponse = response as? HTTPURLResponse {
+                    
+                    // If request is successful (200 : OK)
+                    if httpResponse.statusCode == 200 {
+                        
+                        // Update Search Results with Data
+                        self.updateSearchResults(data)
+                    }
                 }
             }) 
         }
