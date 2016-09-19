@@ -180,6 +180,11 @@ extension SearchViewController: UISearchBarDelegate {
                     // Hide activity indicator
                     UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 })
+                
+                //
+                if let error = error {
+                    print(error.localizedDescription)
+                }
             }) 
         }
   }
