@@ -196,7 +196,10 @@ extension SearchViewController: UISearchBarDelegate {
                         self.updateSearchResults(data)
                     }
                 }
-            }) 
+            })
+            
+            // Start Data Task
+            dataTask?.resume()
         }
   }
     
