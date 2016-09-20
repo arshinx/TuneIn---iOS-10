@@ -105,7 +105,11 @@ class SearchViewController: UIViewController {
             // start download
             download.downloadTask?.resume()
             
+            // Set download tracker
+            download.isDownloadng = true
             
+            // Map downloads url to download in active downloads directory
+            activeDownloads[download.url] = download
         }
     }
   
