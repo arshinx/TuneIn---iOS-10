@@ -30,9 +30,9 @@ class SearchViewController: UIViewController {
         return recognizer
     }()
     
-    lazy var downloadsSession: URLSession = {
+    var downloadsSession: URLSession = {
         let configuration = URLSessionConfiguration.default
-        let session       = URLSession(configuration: configuration, delegate: (self as! URLSessionDelegate), delegateQueue: nil)
+        let session       = URLSession(configuration: configuration)
         return session
     }()
   
