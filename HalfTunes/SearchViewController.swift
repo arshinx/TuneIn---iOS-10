@@ -29,6 +29,12 @@ class SearchViewController: UIViewController {
         var recognizer = UITapGestureRecognizer(target:self, action: #selector(SearchViewController.dismissKeyboard))
         return recognizer
     }()
+    
+    lazy var downloadsSession: URLSession = {
+        let configuration = URLSessionConfiguration.default
+        let session       = URLSession(configuration: configuration, delegate: self, delegateQueue: nil)
+        return session
+    }()
   
     // MARK: View controller methods
   
