@@ -88,6 +88,13 @@ class SearchViewController: UIViewController {
      
         if let url = downloadTask.originalRequest?.url?.absoluteString {
             
+            for (index, track) in searchResults.enumerated() {
+                
+                // Return Index Value (if urls match)
+                if url == track.previewUrl! {
+                    return index
+                }
+            }
         }
         return nil
     }
