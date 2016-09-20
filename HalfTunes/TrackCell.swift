@@ -15,7 +15,7 @@ protocol TrackCellDelegate {
   func downloadTapped(_ cell: TrackCell)
 }
 
-class TrackCell: UITableViewCell {
+class TrackCell: UITableViewCell {  
   
   var delegate: TrackCellDelegate?
   
