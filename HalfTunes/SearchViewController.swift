@@ -96,7 +96,16 @@ class SearchViewController: UIViewController {
         
         if let urlString = track.previewUrl, let url = URL(string: urlString) {
             
-            // 
+            // Initialize Download w/ url
+            let download = Download(url: urlString)
+            
+            // Set download task
+            download.downloadTask = downloadsSession.downloadTask(with: url)
+            
+            // start download
+            download.downloadTask?.resume()
+            
+            
         }
     }
   
