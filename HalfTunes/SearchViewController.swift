@@ -17,75 +17,75 @@ class SearchViewController: UIViewController {
     // When user searches, make HTTP GET requests
     var dataTask: URLSessionDataTask?
 
-  @IBOutlet weak var tableView: UITableView!
-  @IBOutlet weak var searchBar: UISearchBar!
+    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var searchBar: UISearchBar!
 
-  var searchResults = [Track]()
+    var searchResults = [Track]()
   
-  lazy var tapRecognizer: UITapGestureRecognizer = {
-    var recognizer = UITapGestureRecognizer(target:self, action: #selector(SearchViewController.dismissKeyboard))
-    return recognizer
-  }()
+    lazy var tapRecognizer: UITapGestureRecognizer = {
+        var recognizer = UITapGestureRecognizer(target:self, action: #selector(SearchViewController.dismissKeyboard))
+        return recognizer
+    }()
   
-  // MARK: View controller methods
+    // MARK: View controller methods
   
-  override func viewDidLoad() {
-    super.viewDidLoad()
-    tableView.tableFooterView = UIView()
-  }
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        tableView.tableFooterView = UIView()
+    }
   
-  override func didReceiveMemoryWarning() {
-    super.didReceiveMemoryWarning()
-  }
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+    }
   
-  // MARK: Handling Search Results
+    // MARK: Handling Search Results
   
-  // This helper method helps parse response JSON NSData into an array of Track objects.
-  func updateSearchResults(_ data: Data?) {
-    searchResults.removeAll()
-    do {
-      if let data = data, let response = try JSONSerialization.jsonObject(with: data, options:JSONSerialization.ReadingOptions(rawValue:0)) as? [String: AnyObject] {
+    // This helper method helps parse response JSON NSData into an array of Track objects.
+    func updateSearchResults(_ data: Data?) {
+        searchResults.removeAll()
+        do {
+            if let data = data, let response = try JSONSerialization.jsonObject(with: data, options:JSONSerialization.ReadingOptions(rawValue:0)) as? [String: AnyObject] {
         
-        // Get the results array
-        if let array: AnyObject = response["results"] {
-          for trackDictonary in array as! [AnyObject] {
-            if let trackDictonary = trackDictonary as? [String: AnyObject], let previewUrl = trackDictonary["previewUrl"] as? String {
-              // Parse the search result
-              let name = trackDictonary["trackName"] as? String
-              let artist = trackDictonary["artistName"] as? String
-              searchResults.append(Track(name: name, artist: artist, previewUrl: previewUrl))
+                // Get the results array
+                if let array: AnyObject = response["results"] {
+                    for trackDictonary in array as! [AnyObject] {
+                        if let trackDictonary = trackDictonary as? [String: AnyObject], let previewUrl = trackDictonary["previewUrl"] as? String {
+                            // Parse the search result
+                            let name = trackDictonary["trackName"] as? String
+                            let artist = trackDictonary["artistName"] as? String
+                            searchResults.append(Track(name: name, artist: artist, previewUrl: previewUrl))
+                        } else {
+                            print("Not a dictionary")
+                        }
+                    }
+                } else {
+                    print("Results key not found in dictionary")
+                }
             } else {
-              print("Not a dictionary")
+                print("JSON Error")
             }
-          }
-        } else {
-          print("Results key not found in dictionary")
+        } catch let error as NSError {
+            print("Error parsing results: \(error.localizedDescription)")
         }
-      } else {
-        print("JSON Error")
-      }
-    } catch let error as NSError {
-      print("Error parsing results: \(error.localizedDescription)")
-    }
     
-    DispatchQueue.main.async {
-      self.tableView.reloadData()
-      self.tableView.setContentOffset(CGPoint.zero, animated: false)
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+            self.tableView.setContentOffset(CGPoint.zero, animated: false)
+        }
     }
-  }
   
-  // MARK: Keyboard dismissal
+    // MARK: Keyboard dismissal
+    
+    func dismissKeyboard() {
+        searchBar.resignFirstResponder()
+    }
   
-  func dismissKeyboard() {
-    searchBar.resignFirstResponder()
-  }
+    // MARK: Download methods
   
-  // MARK: Download methods
-  
-  // Called when the Download button for a track is tapped
-  func startDownload(_ track: Track) {
-    // TODO
-  }
+    // Called when the Download button for a track is tapped
+    func startDownload(_ track: Track) {
+        // TODO
+    }
   
   // Called when the Pause button for a track is tapped
   func pauseDownload(_ track: Track) {
