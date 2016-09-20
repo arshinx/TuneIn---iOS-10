@@ -20,9 +20,11 @@ class SearchViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
 
+    // Maintain Mappings
     var searchResults   = [Track]()
     var activeDownloads = [String: Download]()
   
+    // Perform / Create when needed
     lazy var tapRecognizer: UITapGestureRecognizer = {
         var recognizer = UITapGestureRecognizer(target:self, action: #selector(SearchViewController.dismissKeyboard))
         return recognizer
