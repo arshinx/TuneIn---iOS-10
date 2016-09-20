@@ -13,4 +13,8 @@ class Download: NSObject {
     var isDownloadng = false
     var progress: Float = 0.0
     
+    var downloadTask: NSURLSessionDownloadTask?
+    var resumeData: NSData?
+    
+    
 }
