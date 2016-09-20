@@ -32,7 +32,7 @@ class SearchViewController: UIViewController {
     
     lazy var downloadsSession: URLSession = {
         let configuration = URLSessionConfiguration.default
-        let session       = URLSession(configuration: configuration, delegate: self, delegateQueue: nil)
+        let session       = URLSession(configuration: configuration, delegate: (self as! URLSessionDelegate), delegateQueue: nil)
         return session
     }()
   
