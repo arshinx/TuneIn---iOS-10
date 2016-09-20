@@ -82,6 +82,15 @@ class SearchViewController: UIViewController {
             self.tableView.setContentOffset(CGPoint.zero, animated: false)
         }
     }
+    
+    // Locate Track and Return Index
+    func trackIndexForDownloadTask(downloadTask: URLSessionDownloadTask) -> Int? {
+     
+        if let url = downloadTask.originalRequest?.url?.absoluteString {
+            
+        }
+        return nil
+    }
   
     // MARK: Keyboard dismissal
     
