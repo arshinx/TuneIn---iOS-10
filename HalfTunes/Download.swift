@@ -16,5 +16,8 @@ class Download: NSObject {
     var downloadTask: NSURLSessionDownloadTask?
     var resumeData: NSData?
     
+    init(url: String) {
+        self.url = url
+    }
     
 }
