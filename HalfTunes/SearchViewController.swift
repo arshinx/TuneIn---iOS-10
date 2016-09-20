@@ -305,3 +305,13 @@ extension SearchViewController: UITableViewDelegate {
   }
 }
 
+// MARK: URLSessionDownloadDelegate 
+
+extension SearchViewController: URLSessionDownloadDelegate {
+    
+    func URLSession(session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingToURL location: NSURL) {
+        print("Finished downloading.")
+    }
+    
+}
+
