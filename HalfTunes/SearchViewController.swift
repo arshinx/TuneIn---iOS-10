@@ -93,7 +93,11 @@ class SearchViewController: UIViewController {
   
     // Called when the Download button for a track is tapped
     func startDownload(_ track: Track) {
-        // TODO
+        
+        if let urlString = track.previewUrl, let url = URL(string: urlString) {
+            
+            // 
+        }
     }
   
   // Called when the Pause button for a track is tapped
