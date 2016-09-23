@@ -239,6 +239,12 @@ extension SearchViewController: URLSessionDownloadDelegate {
             activeDownloads[url] = nil
             
             // Locate Track and Reload Table View
+            if let trackIndex = trackIndexForDownloadTask(downloadTask) {
+                DispatchQueue.main.async(execute: { 
+                    self.tableView.reloadRows(at: [IndexPath(row: trackIndex, section: 0)], with: .none)
+                })
+            }
+                
         }
     }
 }
