@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="16A319" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="9UK-rc-vrg">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="16A319" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="eDe-r2-kHK">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
@@ -37,10 +37,11 @@
                             <constraint firstItem="Vu0-0r-qOu" firstAttribute="top" secondItem="B7c-Ul-OGh" secondAttribute="bottom" id="jQk-8j-L5Y"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="0m9-VH-i5f"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Mm2-Yd-Ssq" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-90.400000000000006" y="-297.30134932533736"/>
+            <point key="canvasLocation" x="848.79999999999995" y="-297.30134932533736"/>
         </scene>
         <!--Search View Controller-->
         <scene sceneID="jsS-L9-Ja3">
@@ -59,7 +60,7 @@
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="gray" indentationWidth="10" reuseIdentifier="TrackCell" rowHeight="62" id="CN0-hZ-xaQ" customClass="TrackCell" customModule="TuneIn" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="22" width="600" height="62"/>
+                                        <rect key="frame" x="0.0" y="86" width="600" height="62"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="CN0-hZ-xaQ" id="kmr-oh-ELD">
                                             <frame key="frameInset" width="600" height="61"/>
@@ -171,7 +172,25 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MQo-rb-luQ" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="774" y="-308"/>
+            <point key="canvasLocation" x="1712.8" y="-308.09595202398805"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="fZT-dV-r0D">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="eDe-r2-kHK" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="aij-FV-tHf">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="9UK-rc-vrg" kind="relationship" relationship="rootViewController" id="Buh-3A-RR1"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="3iV-Ua-VhU" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-90.400000000000006" y="-297.30134932533736"/>
         </scene>
     </scenes>
 </document>
