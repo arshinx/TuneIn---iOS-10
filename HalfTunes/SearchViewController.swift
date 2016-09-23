@@ -218,10 +218,23 @@ extension SearchViewController: URLSessionDownloadDelegate {
             // Log Destination URL
             print(destinationURL)
             
-            //
+            // Move Downloaded file from temporary to desired location
+            let fileManager = FileManager.default
+            
+            do {
+                try fileManager.removeItem(at: destinationURL)
+            } catch {
+                // Non-destructive - File likely does not exist
+            }
+            
+            do {
+                try fileManager.copyItem(at: location, to: destinationURL)
+            } catch let error as Error {
+                print("Could not copy file to disk: \(error.localizedDescription)")
+            }
         }
         
-        //
+        
     }
 }
 
