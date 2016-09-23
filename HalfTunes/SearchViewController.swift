@@ -209,6 +209,7 @@ class SearchViewController: UIViewController {
 // MARK: URL Session Download Delegate - Extension
 extension SearchViewController: URLSessionDownloadDelegate {
     
+    // Download / Play Music --
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
         
         // Extract Request URL from Task, then Generate Permanent local file path to save (path's doc. dir.)
@@ -245,6 +246,16 @@ extension SearchViewController: URLSessionDownloadDelegate {
                 })
             }
                 
+        }
+    }
+    
+    // Show/Track Download Progress --
+    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
+        
+        // Extract url & find download in directory
+        if let downloadUrl = downloadTask.originalRequest?.url?.absoluteString, let download = activeDownloads[downloadUrl] {
+            
+            
         }
     }
 }
@@ -405,15 +416,3 @@ extension SearchViewController: UITableViewDelegate {
     tableView.deselectRow(at: indexPath, animated: true)
   }
 }
-
-// MARK: URLSessionDownloadDelegate 
- /*
- 
-extension SearchViewController: URLSessionDownloadDelegate {
-    
-    func URLSession(session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingToURLlocation: URL) {
-        
-    }
-    
-}
- */
