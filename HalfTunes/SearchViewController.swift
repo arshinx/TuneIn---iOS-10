@@ -189,6 +189,18 @@ class SearchViewController: UIViewController {
     // Return track index
     func trackIndexForDownloadTask(_ downloadTask: URLSessionDownloadTask) -> Int? {
      
+        // retrieve url and unwrap when available
+        if let url = downloadTask.originalRequest?.url?.absoluteString {
+            
+            // Retrieve all tracks with their index
+            for (index, track) in searchResults.enumerated() {
+                
+                // if url matches desired url
+                if url == track.previewUrl! {
+                    return index
+                }
+            }
+        }
         
         return nil
         
