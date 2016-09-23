@@ -234,7 +234,12 @@ extension SearchViewController: URLSessionDownloadDelegate {
             }
         }
         
-        
+        // Remove Downloads from Active Downloads Directory
+        if let url = downloadTask.originalRequest?.url?.absoluteString {
+            activeDownloads[url] = nil
+            
+            // Locate Track and Reload Table View
+        }
     }
 }
 
