@@ -187,7 +187,7 @@ class SearchViewController: UIViewController {
     }
     
     // Return track index
-    func trackIndexForDownloadTask(downloadTask: NSURLSessionDownloadTask) -> Int? {
+    func trackIndexForDownloadTask(_ downloadTask: URLSessionDownloadTask) -> Int? {
      
         
         return nil
