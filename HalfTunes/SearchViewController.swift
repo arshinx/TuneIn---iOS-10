@@ -262,6 +262,18 @@ extension SearchViewController: URLSessionDownloadDelegate {
             let totalSize = ByteCountFormatter.string(fromByteCount: totalBytesExpectedToWrite, countStyle: ByteCountFormatter.CountStyle.binary)
             
             //
+            if let trackIndex = trackIndexForDownloadTask(downloadTask), let trackCell = tableView.cellForRow(at: IndexPath(row: trackIndex, section: 0)) as? TrackCell {
+                
+                DispatchQueue.main.async(execute: { 
+                    
+                    // Asign progress from download to progress view
+                    TrackCell.progressView.progress = download.progress
+                    
+                    
+                    
+                    
+                })
+            }
         }
     }
 }
