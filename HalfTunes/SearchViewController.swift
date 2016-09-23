@@ -100,14 +100,7 @@ class SearchViewController: UIViewController {
         }
         return nil
     }
-    
-    // MARK: URLSessionDownloadDelegate
-    extension SearchViewController: URLSessionDownloadDelegate {
-        
-        
-        
-    }
-        
+
   
     // MARK: Keyboard dismissal
     
@@ -213,11 +206,18 @@ class SearchViewController: UIViewController {
     
 }
 
-// MARK: - Session Download Extension
+// MARK: URL Session Download Delegate - Extension
 extension SearchViewController: URLSessionDownloadDelegate {
     
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
-        print("Finish Downloading!")
+        
+        //
+        if let originalURL = downloadTask.originalRequest?.url?.absoluteString,
+            let destinationURL = localFilePathForUrl(originalURL) {
+            
+        }
+        
+        //
     }
 }
 
