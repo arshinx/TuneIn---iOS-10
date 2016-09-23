@@ -267,10 +267,10 @@ extension SearchViewController: URLSessionDownloadDelegate {
                 DispatchQueue.main.async(execute: { 
                     
                     // Asign progress from download to progress view
-                    TrackCell.progressView.progress = download.progress
+                    trackCell.progressView.progress = download.progress
                     
-                    
-                    
+                    // Display Progress
+                    trackCell.progressLabel.text = String(format: "%.1f%% of %@", download.progress * 100, totalSize)
                     
                 })
             }
