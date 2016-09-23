@@ -261,7 +261,7 @@ extension SearchViewController: URLSessionDownloadDelegate {
             // Generate readable format to display
             let totalSize = ByteCountFormatter.string(fromByteCount: totalBytesExpectedToWrite, countStyle: ByteCountFormatter.CountStyle.binary)
             
-            //
+            // Update Cells with Progress Data
             if let trackIndex = trackIndexForDownloadTask(downloadTask), let trackCell = tableView.cellForRow(at: IndexPath(row: trackIndex, section: 0)) as? TrackCell {
                 
                 DispatchQueue.main.async(execute: { 
