@@ -124,7 +124,7 @@ class SearchViewController: UIViewController {
             download.downloadTask = downloadsSession.downloadTask(with: url)
             
             // start download
-            download.downloadTask?.resume()
+            download.downloadTask!.resume()
             
             // Set download tracker
             download.isDownloadng = true
@@ -185,7 +185,16 @@ class SearchViewController: UIViewController {
         }
         return false
     }
+    
+    // Return track index
+    func trackIndexForDownloadTask(downloadTask: NSURLSessionDownloadTask) -> Int? {
+     
+        
+        return nil
+        
     }
+    
+}
 
 // MARK: - Session Download Extension
 extension SearchViewController: URLSessionDownloadDelegate {
