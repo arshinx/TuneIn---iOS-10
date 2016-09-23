@@ -101,7 +101,12 @@ class SearchViewController: UIViewController {
         return nil
     }
     
-    
+    // MARK: URLSessionDownloadDelegate
+    extension SearchViewController: URLSessionDownloadDelegate {
+        
+        
+        
+    }
         
   
     // MARK: Keyboard dismissal
@@ -215,48 +220,6 @@ extension SearchViewController: URLSessionDownloadDelegate {
         print("Finish Downloading!")
     }
 }
-
-/*
-extension SearchViewController: URLSessionDownloadDelegate {
-    func URLSession(session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingToURL location: NSURL) {
-        // 1
-        if let originalURL = downloadTask.originalRequest?.url?.absoluteString,
-            let destinationURL = localFilePathForUrl(originalURL) {
-            
-            print(destinationURL)
-            
-            // 2
-            let fileManager = FileManager.default
-            do {
-                try fileManager.removeItem(at: destinationURL)
-            } catch {
-                // Non-fatal: file probably doesn't exist
-            }
-            do {
-                try fileManager.copyItem(at: location as URL, to: destinationURL)
-            } catch let error as NSError {
-                print("Could not copy file to disk: \(error.localizedDescription)")
-            }
-        }
-        
-        // 3
-        if let url = downloadTask.originalRequest?.url?.absoluteString {
-            activeDownloads[url] = nil
-            // 4
-            if let trackIndex = trackIndexForDownloadTask(downloadTask: downloadTask) {
-                DispatchQueue.main.asynchronously(execute: { 
-                    
-                    self.tableView.reloadRows(at: [IndexPath.init(row: trackIndex, section: 0) ], with: .none)
-                    
-                })
-            }
-        }
-    }
-    
-}
-*/
-
-
 
 
 // MARK: - UISearchBarDelegate
