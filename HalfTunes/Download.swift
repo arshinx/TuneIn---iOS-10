@@ -5,7 +5,7 @@
 //  Created by Arshin Jain on 9/20/16.
 //  Copyright © 2016 Arshin. All rights reserved.
 //
-import UIKit
+import Foundation
 
 class Download: NSObject {
     

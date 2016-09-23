@@ -11,6 +11,8 @@ import MediaPlayer
 
 class SearchViewController: UIViewController {
     
+    var activeDownloads = [String: Download]()
+    
     // NSURLSession object initialized with configuration
     let defaultSession = URLSession(configuration: URLSessionConfiguration.default)
     
@@ -22,7 +24,7 @@ class SearchViewController: UIViewController {
 
     // Maintain Mappings
     var searchResults   = [Track]()
-    var activeDownloads = [String: Download]()
+    
   
     // Perform / Create when needed
     lazy var tapRecognizer: UITapGestureRecognizer = {
@@ -98,6 +100,9 @@ class SearchViewController: UIViewController {
         }
         return nil
     }
+    
+    
+        
   
     // MARK: Keyboard dismissal
     
@@ -181,6 +186,57 @@ class SearchViewController: UIViewController {
         return false
     }
     }
+
+// MARK: - Session Download Extension
+extension SearchViewController: URLSessionDownloadDelegate {
+    
+    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
+        print("Finish Downloading!")
+    }
+}
+
+/*
+extension SearchViewController: URLSessionDownloadDelegate {
+    func URLSession(session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingToURL location: NSURL) {
+        // 1
+        if let originalURL = downloadTask.originalRequest?.url?.absoluteString,
+            let destinationURL = localFilePathForUrl(originalURL) {
+            
+            print(destinationURL)
+            
+            // 2
+            let fileManager = FileManager.default
+            do {
+                try fileManager.removeItem(at: destinationURL)
+            } catch {
+                // Non-fatal: file probably doesn't exist
+            }
+            do {
+                try fileManager.copyItem(at: location as URL, to: destinationURL)
+            } catch let error as NSError {
+                print("Could not copy file to disk: \(error.localizedDescription)")
+            }
+        }
+        
+        // 3
+        if let url = downloadTask.originalRequest?.url?.absoluteString {
+            activeDownloads[url] = nil
+            // 4
+            if let trackIndex = trackIndexForDownloadTask(downloadTask: downloadTask) {
+                DispatchQueue.main.asynchronously(execute: { 
+                    
+                    self.tableView.reloadRows(at: [IndexPath.init(row: trackIndex, section: 0) ], with: .none)
+                    
+                })
+            }
+        }
+    }
+    
+}
+*/
+
+
+
 
 // MARK: - UISearchBarDelegate
 
@@ -339,12 +395,13 @@ extension SearchViewController: UITableViewDelegate {
 }
 
 // MARK: URLSessionDownloadDelegate 
-/*
+ /*
+ 
 extension SearchViewController: URLSessionDownloadDelegate {
     
-    func URLSession(session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingToURL location: NSURL) {
-        print("Finished downloading.")
+    func URLSession(session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingToURLlocation: URL) {
+        
     }
     
 }
-*/
+ */
