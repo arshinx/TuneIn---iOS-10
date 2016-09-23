@@ -355,82 +355,82 @@ extension SearchViewController: UISearchBarDelegate {
   }
 }
 
-// MARK: TrackCellDelegate
+    // MARK: TrackCellDelegate
 
-extension SearchViewController: TrackCellDelegate {
-  func pauseTapped(_ cell: TrackCell) {
-    if let indexPath = tableView.indexPath(for: cell) {
-      let track = searchResults[(indexPath as NSIndexPath).row]
-      pauseDownload(track)
-      tableView.reloadRows(at: [IndexPath(row: (indexPath as NSIndexPath).row, section: 0)], with: .none)
-    }
-  }
+    extension SearchViewController: TrackCellDelegate {
+        func pauseTapped(_ cell: TrackCell) {
+            if let indexPath = tableView.indexPath(for: cell) {
+                let track = searchResults[(indexPath as NSIndexPath).row]
+                pauseDownload(track)
+                tableView.reloadRows(at: [IndexPath(row: (indexPath as NSIndexPath).row, section: 0)], with: .none)
+            }
+        }
   
-  func resumeTapped(_ cell: TrackCell) {
-    if let indexPath = tableView.indexPath(for: cell) {
-      let track = searchResults[(indexPath as NSIndexPath).row]
-      resumeDownload(track)
-      tableView.reloadRows(at: [IndexPath(row: (indexPath as NSIndexPath).row, section: 0)], with: .none)
-    }
-  }
+        func resumeTapped(_ cell: TrackCell) {
+            if let indexPath = tableView.indexPath(for: cell) {
+                let track = searchResults[(indexPath as NSIndexPath).row]
+                resumeDownload(track)
+                tableView.reloadRows(at: [IndexPath(row: (indexPath as NSIndexPath).row, section: 0)], with: .none)
+            }
+        }
   
-  func cancelTapped(_ cell: TrackCell) {
-    if let indexPath = tableView.indexPath(for: cell) {
-      let track = searchResults[(indexPath as NSIndexPath).row]
-      cancelDownload(track)
-      tableView.reloadRows(at: [IndexPath(row: (indexPath as NSIndexPath).row, section: 0)], with: .none)
-    }
-  }
+        func cancelTapped(_ cell: TrackCell) {
+            if let indexPath = tableView.indexPath(for: cell) {
+                let track = searchResults[(indexPath as NSIndexPath).row]
+                cancelDownload(track)
+                tableView.reloadRows(at: [IndexPath(row: (indexPath as NSIndexPath).row, section: 0)], with: .none)
+            }
+        }
   
-  func downloadTapped(_ cell: TrackCell) {
-    if let indexPath = tableView.indexPath(for: cell) {
-      let track = searchResults[(indexPath as NSIndexPath).row]
-      startDownload(track)
-      tableView.reloadRows(at: [IndexPath(row: (indexPath as NSIndexPath).row, section: 0)], with: .none)
+        func downloadTapped(_ cell: TrackCell) {
+            if let indexPath = tableView.indexPath(for: cell) {
+                let track = searchResults[(indexPath as NSIndexPath).row]
+                startDownload(track)
+                tableView.reloadRows(at: [IndexPath(row: (indexPath as NSIndexPath).row, section: 0)], with: .none)
+            }
+        }
     }
-  }
-}
 
-// MARK: UITableViewDataSource
+    // MARK: UITableViewDataSource
 
-extension SearchViewController: UITableViewDataSource {
-  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return searchResults.count
-  }
+    extension SearchViewController: UITableViewDataSource {
+        func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+            return searchResults.count
+        }
   
-  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    let cell = tableView.dequeueReusableCell(withIdentifier: "TrackCell", for: indexPath) as!TrackCell
+        func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "TrackCell", for: indexPath) as!TrackCell
     
-    // Delegate cell button tap events to this view controller
-    cell.delegate = self
+            // Delegate cell button tap events to this view controller
+            cell.delegate = self
     
-    let track = searchResults[(indexPath as NSIndexPath).row]
+            let track = searchResults[(indexPath as NSIndexPath).row]
     
-    // Configure title and artist labels
-    cell.titleLabel.text = track.name
-    cell.artistLabel.text = track.artist
+            // Configure title and artist labels
+            cell.titleLabel.text = track.name
+            cell.artistLabel.text = track.artist
 
-    // If the track is already downloaded, enable cell selection and hide the Download button
-    let downloaded = localFileExistsForTrack(track)
-    cell.selectionStyle = downloaded ? UITableViewCellSelectionStyle.gray : UITableViewCellSelectionStyle.none
-    cell.downloadButton.isHidden = downloaded
+            // If the track is already downloaded, enable cell selection and hide the Download button
+            let downloaded = localFileExistsForTrack(track)
+            cell.selectionStyle = downloaded ? UITableViewCellSelectionStyle.gray : UITableViewCellSelectionStyle.none
+            cell.downloadButton.isHidden = downloaded
     
-    return cell
-  }
-}
-
-// MARK: UITableViewDelegate
-
-extension SearchViewController: UITableViewDelegate {
-  func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-    return 62.0
-  }
-  
-  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    let track = searchResults[(indexPath as NSIndexPath).row]
-    if localFileExistsForTrack(track) {
-      playDownload(track)
+            return cell
+        }
     }
-    tableView.deselectRow(at: indexPath, animated: true)
-  }
-}
+
+    // MARK: UITableViewDelegate
+
+    extension SearchViewController: UITableViewDelegate {
+        func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+            return 62.0
+        }
+  
+        func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+            let track = searchResults[(indexPath as NSIndexPath).row]
+            if localFileExistsForTrack(track) {
+                playDownload(track)
+            }
+            tableView.deselectRow(at: indexPath, animated: true)
+        }
+    }
