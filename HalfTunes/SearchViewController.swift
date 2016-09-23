@@ -211,10 +211,14 @@ extension SearchViewController: URLSessionDownloadDelegate {
     
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
         
-        //
+        // Extract Request URL from Task, then Generate Permanent local file path to save (path's doc. dir.)
         if let originalURL = downloadTask.originalRequest?.url?.absoluteString,
             let destinationURL = localFilePathForUrl(originalURL) {
             
+            // Log Destination URL
+            print(destinationURL)
+            
+            //
         }
         
         //
