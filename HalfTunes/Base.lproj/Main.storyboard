@@ -7,6 +7,38 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--View Controller-->
+        <scene sceneID="WRr-nY-yru">
+            <objects>
+                <viewController id="9UK-rc-vrg" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="1PY-fF-5qd"/>
+                        <viewControllerLayoutGuide type="bottom" id="Vu0-0r-qOu"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Tfz-eB-3xZ">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="B7c-Ul-OGh">
+                                <color key="backgroundColor" red="0.91937059164047241" green="0.29629787802696228" blue="0.26633119583129883" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <state key="normal" title="Tap to Continue!">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="B7c-Ul-OGh" firstAttribute="top" secondItem="Tfz-eB-3xZ" secondAttribute="top" id="IUA-75-IMo"/>
+                            <constraint firstAttribute="trailing" secondItem="B7c-Ul-OGh" secondAttribute="trailing" id="Omw-JT-YSl"/>
+                            <constraint firstItem="B7c-Ul-OGh" firstAttribute="leading" secondItem="Tfz-eB-3xZ" secondAttribute="leading" id="gbd-iF-eLD"/>
+                            <constraint firstItem="Vu0-0r-qOu" firstAttribute="top" secondItem="B7c-Ul-OGh" secondAttribute="bottom" id="jQk-8j-L5Y"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Mm2-Yd-Ssq" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-90.400000000000006" y="-297.30134932533736"/>
+        </scene>
         <!--Search View Controller-->
         <scene sceneID="jsS-L9-Ja3">
             <objects>
