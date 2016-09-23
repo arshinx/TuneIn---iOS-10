@@ -255,7 +255,13 @@ extension SearchViewController: URLSessionDownloadDelegate {
         // Extract url & find download in directory
         if let downloadUrl = downloadTask.originalRequest?.url?.absoluteString, let download = activeDownloads[downloadUrl] {
             
+            // Calculate progress as ratio and save
+            download.progress = Float(totalBytesWritten) / Float(totalBytesExpectedToWrite)
             
+            // Generate readable format to display
+            let totalSize = ByteCountFormatter.string(fromByteCount: totalBytesExpectedToWrite, countStyle: ByteCountFormatter.CountStyle.binary)
+            
+            //
         }
     }
 }
