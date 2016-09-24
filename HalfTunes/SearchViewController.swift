@@ -245,6 +245,23 @@ class SearchViewController: UIViewController {
 
 // MARK: - URLSessionDelegate
 
+extension SearchViewController: URLSessionDelegate {
+    
+    func urlSessionDidFinishEvents(forBackgroundURLSession session: URLSession) {
+        
+        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+            
+            if let completionHandler = appDelegate.backgroundSessionCompletionHandler {
+               
+                appDelegate.backgroundSessionCompletionHandler = nil
+                
+                DispatchQueue.main.async(execute: {
+                    completionHandler()
+                })
+            }
+        }
+    }
+}
 
 // MARK: URL Session Download Delegate - Extension
 extension SearchViewController: URLSessionDownloadDelegate {
