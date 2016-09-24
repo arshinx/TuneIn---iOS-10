@@ -6,58 +6,54 @@
 //  Copyright (c) 2016 Arshin Jain. All rights reserved.
 //
 
+
 import UIKit
 import MediaPlayer
 
 class SearchViewController: UIViewController {
-    
     var activeDownloads = [String: Download]()
     
-    // NSURLSession object initialized with configuration
-    let defaultSession = URLSession(configuration: URLSessionConfiguration.default)
-    
-    // When user searches, make HTTP GET requests
+    // 1
+    let defaultSession = Foundation.URLSession(configuration: URLSessionConfiguration.default)
+    // 2
     var dataTask: URLSessionDataTask?
-
+    
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
-
-    // Maintain Mappings
-    var searchResults   = [Track]()
     
-  
-    // Perform / Create when needed
+    var searchResults = [Track]()
+    
     lazy var tapRecognizer: UITapGestureRecognizer = {
         var recognizer = UITapGestureRecognizer(target:self, action: #selector(SearchViewController.dismissKeyboard))
         return recognizer
     }()
     
-    var downloadsSession: URLSession = {
-        let configuration = URLSessionConfiguration.default
-        let session       = URLSession(configuration: configuration)
+    lazy var downloadsSession: Foundation.URLSession = {
+        let configuration = URLSessionConfiguration.background(withIdentifier: "bgSessionConfiguration")
+        let session = Foundation.URLSession(configuration: configuration, delegate: self, delegateQueue: nil)
         return session
     }()
-  
+    
     // MARK: View controller methods
-  
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.tableFooterView = UIView()
         _ = self.downloadsSession
     }
-  
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
-  
+    
     // MARK: Handling Search Results
-  
+    
     // This helper method helps parse response JSON NSData into an array of Track objects.
     func updateSearchResults(_ data: Data?) {
         searchResults.removeAll()
         do {
             if let data = data, let response = try JSONSerialization.jsonObject(with: data, options:JSONSerialization.ReadingOptions(rawValue:0)) as? [String: AnyObject] {
-        
+                
                 // Get the results array
                 if let array: AnyObject = response["results"] {
                     for trackDictonary in array as! [AnyObject] {
@@ -79,184 +75,133 @@ class SearchViewController: UIViewController {
         } catch let error as NSError {
             print("Error parsing results: \(error.localizedDescription)")
         }
-    
+        
         DispatchQueue.main.async {
             self.tableView.reloadData()
             self.tableView.setContentOffset(CGPoint.zero, animated: false)
         }
     }
     
-    // Locate Track and Return Index
-    func trackIndexForDownloadTask(downloadTask: URLSessionDownloadTask) -> Int? {
-     
-        if let url = downloadTask.originalRequest?.url?.absoluteString {
-            
-            for (index, track) in searchResults.enumerated() {
-                
-                // Return Index Value (if urls match)
-                if url == track.previewUrl! {
-                    return index
-                }
-            }
-        }
-        return nil
-    }
-
-  
     // MARK: Keyboard dismissal
     
     func dismissKeyboard() {
         searchBar.resignFirstResponder()
     }
-  
+    
     // MARK: Download methods
-  
+    
     // Called when the Download button for a track is tapped
     func startDownload(_ track: Track) {
-        
-        if let urlString = track.previewUrl, let url = URL(string: urlString) {
-            
-            // Initialize Download w/ url
+        if let urlString = track.previewUrl, let url =  URL(string: urlString) {
+            // 1
             let download = Download(url: urlString)
-            
-            // Set download task
+            // 2
             download.downloadTask = downloadsSession.downloadTask(with: url)
-            
-            // start download
+            // 3
             download.downloadTask!.resume()
-            
-            // Set download tracker
+            // 4
             download.isDownloadng = true
-            
-            // Map downloads url to download in active downloads directory
+            // 5
             activeDownloads[download.url] = download
         }
     }
-  
-  // Called when the Pause button for a track is tapped
-  func pauseDownload(_ track: Track) {
     
-    if let urlString = track.previewUrl, let download = activeDownloads[urlString] {
-        
-        if (download.isDownloadng) {
-            
-            download.downloadTask?.cancel { data in
-                
-                if data != nil {
-                    download.resumeData = data as NSData?
+    // Called when the Pause button for a track is tapped
+    func pauseDownload(_ track: Track) {
+        if let urlString = track.previewUrl,
+            let download = activeDownloads[urlString] {
+            if(download.isDownloadng) {
+                download.downloadTask?.cancel { data in
+                    if data != nil {
+                        download.resumeData = data as NSData?
+                    }
                 }
+                download.isDownloadng = false
             }
-            
-            download.isDownloadng = false
         }
     }
-  }
-  
+    
     // Called when the Cancel button for a track is tapped
     func cancelDownload(_ track: Track) {
-        
-        if let urlString = track.previewUrl, let download = activeDownloads[urlString] {
-            
+        if let urlString = track.previewUrl,
+            let download = activeDownloads[urlString] {
             download.downloadTask?.cancel()
             activeDownloads[urlString] = nil
         }
     }
-  
-  // Called when the Resume button for a track is tapped
-  func resumeDownload(_ track: Track) {
     
-    if let urlString = track.previewUrl, let download = activeDownloads[urlString] {
-        
-        if let resumeData = download.resumeData {
-            
-            download.downloadTask = downloadsSession.downloadTask(withResumeData: resumeData as Data)
-            download.downloadTask!.resume()
-            download.isDownloadng = true
-            
-        } else if let url = URL(string: download.url) {
-            
-            download.downloadTask = downloadsSession.downloadTask(with: url)
-            download.downloadTask!.resume()
-            download.isDownloadng = true
+    // Called when the Resume button for a track is tapped
+    func resumeDownload(_ track: Track) {
+        if let urlString = track.previewUrl,
+            let download = activeDownloads[urlString] {
+            if let resumeData = download.resumeData {
+                download.downloadTask = downloadsSession.downloadTask(withResumeData: resumeData as Data)
+                download.downloadTask!.resume()
+                download.isDownloadng = true
+            } else if let url = URL(string: download.url) {
+                download.downloadTask = downloadsSession.downloadTask(with: url)
+                download.downloadTask!.resume()
+                download.isDownloadng = true
+            }
         }
     }
-  }
-  
-   // This method attempts to play the local file (if it exists) when the cell is tapped
-  func playDownload(_ track: Track) {
     
-    if let urlString = track.previewUrl, let url = localFilePathForUrl(urlString) {
-    
-        let moviePlayer:MPMoviePlayerViewController! = MPMoviePlayerViewController(contentURL: url)
-        presentMoviePlayerViewControllerAnimated(moviePlayer)
+    // This method attempts to play the local file (if it exists) when the cell is tapped
+    func playDownload(_ track: Track) {
+        if let urlString = track.previewUrl, let url = localFilePathForUrl(urlString) {
+            let moviePlayer:MPMoviePlayerViewController! = MPMoviePlayerViewController(contentURL: url)
+            presentMoviePlayerViewControllerAnimated(moviePlayer)
+        }
     }
-  }
-  
+    
     // MARK: Download helper methods
-  
+    
     // This method generates a permanent local file path to save a track to by appending
     // the lastPathComponent of the URL (i.e. the file name and extension of the file)
     // to the path of the app’s Documents directory.
     func localFilePathForUrl(_ previewUrl: String) -> URL? {
         let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString
-    
         let url = URL(string: previewUrl)
-    
-        if let lastPathComponent = url?.lastPathComponent {
-            let fullPath = documentsPath.appendingPathComponent(lastPathComponent)
+        let lastPathComponent = url?.lastPathComponent
+        if lastPathComponent != nil {
+            let fullPath = documentsPath.appendingPathComponent(lastPathComponent!)
             return URL(fileURLWithPath:fullPath)
         }
         return nil
     }
-  
+    
     // This method checks if the local file exists at the path generated by localFilePathForUrl(_:)
     func localFileExistsForTrack(_ track: Track) -> Bool {
         if let urlString = track.previewUrl, let localUrl = localFilePathForUrl(urlString) {
+            
             var isDir : ObjCBool = false
             let path = localUrl.path
-            
             return FileManager.default.fileExists(atPath: path, isDirectory: &isDir)
             
         }
         return false
     }
     
-    // Return track index
     func trackIndexForDownloadTask(_ downloadTask: URLSessionDownloadTask) -> Int? {
-     
-        // retrieve url and unwrap when available
         if let url = downloadTask.originalRequest?.url?.absoluteString {
-            
-            // Retrieve all tracks with their index
             for (index, track) in searchResults.enumerated() {
-                
-                // if url matches desired url
                 if url == track.previewUrl! {
                     return index
                 }
             }
         }
-        
         return nil
-        
     }
-    
 }
 
-
-
-// MARK: - URLSessionDelegate
+// MARK: - NSURLSessionDelegate
 
 extension SearchViewController: URLSessionDelegate {
     
     func urlSessionDidFinishEvents(forBackgroundURLSession session: URLSession) {
-        
         if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-            
             if let completionHandler = appDelegate.backgroundSessionCompletionHandler {
-               
                 appDelegate.backgroundSessionCompletionHandler = nil
-                
                 DispatchQueue.main.async(execute: {
                     completionHandler()
                 })
@@ -265,88 +210,63 @@ extension SearchViewController: URLSessionDelegate {
     }
 }
 
-
-
-// MARK: URL Session Download Delegate - Extension
+// MARK: - NSURLSessionDownloadDelegate
 
 extension SearchViewController: URLSessionDownloadDelegate {
-    
-    // Download / Play Music --
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
-        
-        // Extract Request URL from Task, then Generate Permanent local file path to save (path's doc. dir.)
+        // 1
         if let originalURL = downloadTask.originalRequest?.url?.absoluteString,
             let destinationURL = localFilePathForUrl(originalURL) {
             
-            // Log Destination URL
             print(destinationURL)
             
-            // Move Downloaded file from temporary to desired location
+            // 2
             let fileManager = FileManager.default
-            
             do {
                 try fileManager.removeItem(at: destinationURL)
             } catch {
-                // Non-destructive - File likely does not exist
+                // Non-fatal: file probably doesn't exist
             }
-            
             do {
                 try fileManager.copyItem(at: location, to: destinationURL)
-            } catch let error as Error {
+            } catch let error as NSError {
                 print("Could not copy file to disk: \(error.localizedDescription)")
             }
         }
         
-        // Remove Downloads from Active Downloads Directory
+        // 3
         if let url = downloadTask.originalRequest?.url?.absoluteString {
             activeDownloads[url] = nil
-            
-            // Locate Track and Reload Table View
+            // 4
             if let trackIndex = trackIndexForDownloadTask(downloadTask) {
-                DispatchQueue.main.async(execute: { 
+                DispatchQueue.main.async(execute: {
                     self.tableView.reloadRows(at: [IndexPath(row: trackIndex, section: 0)], with: .none)
                 })
             }
-                
         }
     }
     
-    // Show/Track Download Progress --
+    
+    
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
         
-        // Extract url & find download in directory
-        if let downloadUrl = downloadTask.originalRequest?.url?.absoluteString, let download = activeDownloads[downloadUrl] {
-            
-            // Calculate progress as ratio and save
-            download.progress = Float(totalBytesWritten) / Float(totalBytesExpectedToWrite)
-            
-            // Generate readable format to display
+        // 1
+        if let downloadUrl = downloadTask.originalRequest?.url?.absoluteString,
+            let download = activeDownloads[downloadUrl] {
+            // 2
+            download.progress = Float(totalBytesWritten)/Float(totalBytesExpectedToWrite)
+            // 3
             let totalSize = ByteCountFormatter.string(fromByteCount: totalBytesExpectedToWrite, countStyle: ByteCountFormatter.CountStyle.binary)
-            
-            // Update Cells with Progress Data
+            // 4
             if let trackIndex = trackIndexForDownloadTask(downloadTask), let trackCell = tableView.cellForRow(at: IndexPath(row: trackIndex, section: 0)) as? TrackCell {
-                
-                DispatchQueue.main.async(execute: { 
-                    
-                    // Asign progress from download to progress view
+                DispatchQueue.main.async(execute: {
                     trackCell.progressView.progress = download.progress
-                    
-                    // Display Progress
-                    trackCell.progressLabel.text = String(format: "%.1f%% of %@", download.progress * 100, totalSize)
-                    
+                    trackCell.progressLabel.text =  String(format: "%.1f%% of %@",  download.progress * 100, totalSize)
                 })
             }
         }
     }
 }
-
-
-
-
-
-
-
-
 
 // MARK: - UISearchBarDelegate
 
@@ -460,9 +380,9 @@ extension SearchViewController: UITableViewDataSource {
             showDownloadControls = true
             
             cell.progressView.progress = download.progress
-            cell.progressLabel.text = (download.isDownloading) ? "Downloading..." : "Paused"
+            cell.progressLabel.text = (download.isDownloadng) ? "Downloading..." : "Paused"
             
-            let title = (download.isDownloading) ? "Pause" : "Resume"
+            let title = (download.isDownloadng) ? "Pause" : "Resume"
             cell.pauseButton.setTitle(title, for: UIControlState())
         }
         cell.progressView.isHidden = !showDownloadControls
