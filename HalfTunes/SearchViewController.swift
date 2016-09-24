@@ -410,10 +410,24 @@ extension SearchViewController: UISearchBarDelegate {
             cell.titleLabel.text = track.name
             cell.artistLabel.text = track.artist
 
+            //
+            var showDownloadControls = false
+            
+            if let download = activeDownloads[track.previewUrl!] {
+                
+                showDownloadControls = true
+                
+                cell.progressView.progress  = download.progress
+                cell.progressLabel.text     = (download.isDownloadng) ? "Downloading..." : "Paused"
+            }
+            
+            cell.progressView.isHidden  = !showDownloadControls
+            cell.progressLabel.isHidden = !showDownloadControls
+            
             // If the track is already downloaded, enable cell selection and hide the Download button
             let downloaded = localFileExistsForTrack(track)
             cell.selectionStyle = downloaded ? UITableViewCellSelectionStyle.gray : UITableViewCellSelectionStyle.none
-            cell.downloadButton.isHidden = downloaded
+            cell.downloadButton.isHidden = downloaded || showDownloadControls
     
             return cell
         }
