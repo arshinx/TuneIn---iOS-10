@@ -135,24 +135,60 @@ class SearchViewController: UIViewController {
   
   // Called when the Pause button for a track is tapped
   func pauseDownload(_ track: Track) {
-    // TODO
+    
+    if let urlString = track.previewUrl, let download = activeDownloads[urlString] {
+        
+        if (download.isDownloadng) {
+            
+            download.downloadTask?.cancel { data in
+                
+                if data != nil {
+                    download.resumeData = data as NSData?
+                }
+            }
+            
+            download.isDownloadng = false
+        }
+    }
   }
   
-  // Called when the Cancel button for a track is tapped
-  func cancelDownload(_ track: Track) {
-    // TODO
-  }
+    // Called when the Cancel button for a track is tapped
+    func cancelDownload(_ track: Track) {
+        
+        if let urlString = track.previewUrl, let download = activeDownloads[urlString] {
+            
+            download.downloadTask?.cancel()
+            activeDownloads[urlString] = nil
+        }
+    }
   
   // Called when the Resume button for a track is tapped
   func resumeDownload(_ track: Track) {
-    // TODO
+    
+    if let urlString = track.previewUrl, let download = activeDownloads[urlString] {
+        
+        if let resumeData = download.resumeData {
+            
+            download.downloadTask = downloadsSession.downloadTask(withResumeData: resumeData as Data)
+            download.downloadTask!.resume()
+            download.isDownloadng = true
+            
+        } else if let url = URL(string: download.url) {
+            
+            download.downloadTask = downloadsSession.downloadTask(with: url)
+            download.downloadTask!.resume()
+            download.isDownloadng = true
+        }
+    }
   }
   
    // This method attempts to play the local file (if it exists) when the cell is tapped
   func playDownload(_ track: Track) {
+    
     if let urlString = track.previewUrl, let url = localFilePathForUrl(urlString) {
-      let moviePlayer:MPMoviePlayerViewController! = MPMoviePlayerViewController(contentURL: url)
-      presentMoviePlayerViewControllerAnimated(moviePlayer)
+    
+        let moviePlayer:MPMoviePlayerViewController! = MPMoviePlayerViewController(contentURL: url)
+        presentMoviePlayerViewControllerAnimated(moviePlayer)
     }
   }
   
@@ -206,6 +242,9 @@ class SearchViewController: UIViewController {
     }
     
 }
+
+// MARK: - URLSessionDelegate
+
 
 // MARK: URL Session Download Delegate - Extension
 extension SearchViewController: URLSessionDownloadDelegate {
