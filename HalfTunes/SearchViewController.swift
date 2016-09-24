@@ -243,6 +243,8 @@ class SearchViewController: UIViewController {
     
 }
 
+
+
 // MARK: - URLSessionDelegate
 
 extension SearchViewController: URLSessionDelegate {
@@ -263,7 +265,10 @@ extension SearchViewController: URLSessionDelegate {
     }
 }
 
+
+
 // MARK: URL Session Download Delegate - Extension
+
 extension SearchViewController: URLSessionDownloadDelegate {
     
     // Download / Play Music --
