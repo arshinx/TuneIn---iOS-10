@@ -43,6 +43,7 @@ class SearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.tableFooterView = UIView()
+        _ = self.downloadsSession
     }
   
     override func didReceiveMemoryWarning() {
