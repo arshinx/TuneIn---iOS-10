@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7396957F1D960FE900B3962B /* SearchVCBackup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7396957E1D960FE900B3962B /* SearchVCBackup.swift */; };
 		73C63BED1D91E95400093A93 /* Download.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73C63BEC1D91E95400093A93 /* Download.swift */; };
 		D9EF8FC71B53FD2100EFC4B6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9EF8FC61B53FD2100EFC4B6 /* AppDelegate.swift */; };
 		D9EF8FCE1B53FD2100EFC4B6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D9EF8FCC1B53FD2100EFC4B6 /* Main.storyboard */; };
@@ -18,6 +19,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7396957E1D960FE900B3962B /* SearchVCBackup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchVCBackup.swift; sourceTree = "<group>"; };
 		73C63BEC1D91E95400093A93 /* Download.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Download.swift; sourceTree = "<group>"; };
 		D9EF8FC11B53FD2100EFC4B6 /* TuneIn.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TuneIn.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D9EF8FC51B53FD2100EFC4B6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -80,6 +82,7 @@
 				D92117481B596DFE008DAD44 /* Cells */,
 				D92117491B596E03008DAD44 /* Data Objects */,
 				D9EF8FE81B53FD6900EFC4B6 /* SearchViewController.swift */,
+				7396957E1D960FE900B3962B /* SearchVCBackup.swift */,
 				D9EF8FC61B53FD2100EFC4B6 /* AppDelegate.swift */,
 				D9EF8FCC1B53FD2100EFC4B6 /* Main.storyboard */,
 				D9EF8FCF1B53FD2100EFC4B6 /* Images.xcassets */,
@@ -173,6 +176,7 @@
 			files = (
 				D9EF8FEA1B53FD6900EFC4B6 /* SearchViewController.swift in Sources */,
 				D9EF8FC71B53FD2100EFC4B6 /* AppDelegate.swift in Sources */,
+				7396957F1D960FE900B3962B /* SearchVCBackup.swift in Sources */,
 				D9EF8FF11B53FDCB00EFC4B6 /* TrackCell.swift in Sources */,
 				D9EF8FF21B53FDCB00EFC4B6 /* Track.swift in Sources */,
 				73C63BED1D91E95400093A93 /* Download.swift in Sources */,

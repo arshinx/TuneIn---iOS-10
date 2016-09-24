@@ -341,172 +341,158 @@ extension SearchViewController: URLSessionDownloadDelegate {
 }
 
 
+
+
+
+
+
+
+
 // MARK: - UISearchBarDelegate
 
 extension SearchViewController: UISearchBarDelegate {
-    
-    
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        
-        // Dimiss the keyboard
         dismissKeyboard()
-    
-        // Search bar is not empty
+        
         if !searchBar.text!.isEmpty {
-            
-            // Cancel data tasks should they be available
+            // 1
             if dataTask != nil {
-                
                 dataTask?.cancel()
             }
-            
-            // Enable Activity indicator
+            // 2
             UIApplication.shared.isNetworkActivityIndicatorVisible = true
-            
-            // Verify whether string query is properly encoded
+            // 3
             let expectedCharSet = CharacterSet.urlQueryAllowed
             let searchTerm = searchBar.text!.addingPercentEncoding(withAllowedCharacters: expectedCharSet)!
-            
-            // Create a url object for iTunes Search API
+            // 4
             let url = URL(string: "https://itunes.apple.com/search?media=music&entity=song&term=\(searchTerm)")
-            
-            // Handle HTTP GET request
+            // 5
             dataTask = defaultSession.dataTask(with: url!, completionHandler: {
-                
                 data, response, error in
-                
-                // Hide activity indicator, UI update on main thread!
-                DispatchQueue.main.async(execute: { 
-                    
-                    // Hide activity indicator
+                // 6
+                DispatchQueue.main.async {
                     UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                })
-                
-                // If request is successful, parse response and update data in table view
+                }
+                // 7
                 if let error = error {
-                    
-                    // Log Error
                     print(error.localizedDescription)
-                    
                 } else if let httpResponse = response as? HTTPURLResponse {
-                    
-                    // If request is successful (200 : OK)
                     if httpResponse.statusCode == 200 {
-                        
-                        // Update Search Results with Data
                         self.updateSearchResults(data)
                     }
                 }
             })
-            
-            // Start Data Task
+            // 8
             dataTask?.resume()
         }
-  }
+    }
     
-  func position(for bar: UIBarPositioning) -> UIBarPosition {
-    return .topAttached
-  }
+    func position(for bar: UIBarPositioning) -> UIBarPosition {
+        return .topAttached
+    }
     
-  func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-    view.addGestureRecognizer(tapRecognizer)
-  }
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        view.addGestureRecognizer(tapRecognizer)
+    }
     
-  func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-    view.removeGestureRecognizer(tapRecognizer)
-  }
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        view.removeGestureRecognizer(tapRecognizer)
+    }
 }
 
-    // MARK: TrackCellDelegate
+// MARK: TrackCellDelegate
 
-    extension SearchViewController: TrackCellDelegate {
-        func pauseTapped(_ cell: TrackCell) {
-            if let indexPath = tableView.indexPath(for: cell) {
-                let track = searchResults[(indexPath as NSIndexPath).row]
-                pauseDownload(track)
-                tableView.reloadRows(at: [IndexPath(row: (indexPath as NSIndexPath).row, section: 0)], with: .none)
-            }
-        }
-  
-        func resumeTapped(_ cell: TrackCell) {
-            if let indexPath = tableView.indexPath(for: cell) {
-                let track = searchResults[(indexPath as NSIndexPath).row]
-                resumeDownload(track)
-                tableView.reloadRows(at: [IndexPath(row: (indexPath as NSIndexPath).row, section: 0)], with: .none)
-            }
-        }
-  
-        func cancelTapped(_ cell: TrackCell) {
-            if let indexPath = tableView.indexPath(for: cell) {
-                let track = searchResults[(indexPath as NSIndexPath).row]
-                cancelDownload(track)
-                tableView.reloadRows(at: [IndexPath(row: (indexPath as NSIndexPath).row, section: 0)], with: .none)
-            }
-        }
-  
-        func downloadTapped(_ cell: TrackCell) {
-            if let indexPath = tableView.indexPath(for: cell) {
-                let track = searchResults[(indexPath as NSIndexPath).row]
-                startDownload(track)
-                tableView.reloadRows(at: [IndexPath(row: (indexPath as NSIndexPath).row, section: 0)], with: .none)
-            }
-        }
-    }
-
-    // MARK: UITableViewDataSource
-
-    extension SearchViewController: UITableViewDataSource {
-        func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-            return searchResults.count
-        }
-  
-        func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "TrackCell", for: indexPath) as!TrackCell
-    
-            // Delegate cell button tap events to this view controller
-            cell.delegate = self
-    
+extension SearchViewController: TrackCellDelegate {
+    func pauseTapped(_ cell: TrackCell) {
+        if let indexPath = tableView.indexPath(for: cell) {
             let track = searchResults[(indexPath as NSIndexPath).row]
-    
-            // Configure title and artist labels
-            cell.titleLabel.text = track.name
-            cell.artistLabel.text = track.artist
-
-            //
-            var showDownloadControls = false
-            
-            if let download = activeDownloads[track.previewUrl!] {
-                
-                showDownloadControls = true
-                
-                cell.progressView.progress  = download.progress
-                cell.progressLabel.text     = (download.isDownloadng) ? "Downloading..." : "Paused"
-            }
-            
-            cell.progressView.isHidden  = !showDownloadControls
-            cell.progressLabel.isHidden = !showDownloadControls
-            
-            // If the track is already downloaded, enable cell selection and hide the Download button
-            let downloaded = localFileExistsForTrack(track)
-            cell.selectionStyle = downloaded ? UITableViewCellSelectionStyle.gray : UITableViewCellSelectionStyle.none
-            cell.downloadButton.isHidden = downloaded || showDownloadControls
-    
-            return cell
+            pauseDownload(track)
+            tableView.reloadRows(at: [IndexPath(row: (indexPath as NSIndexPath).row, section: 0)], with: .none)
         }
     }
-
-    // MARK: UITableViewDelegate
-
-    extension SearchViewController: UITableViewDelegate {
-        func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-            return 62.0
-        }
-  
-        func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    
+    func resumeTapped(_ cell: TrackCell) {
+        if let indexPath = tableView.indexPath(for: cell) {
             let track = searchResults[(indexPath as NSIndexPath).row]
-            if localFileExistsForTrack(track) {
-                playDownload(track)
-            }
-            tableView.deselectRow(at: indexPath, animated: true)
+            resumeDownload(track)
+            tableView.reloadRows(at: [IndexPath(row: (indexPath as NSIndexPath).row, section: 0)], with: .none)
         }
     }
+    
+    func cancelTapped(_ cell: TrackCell) {
+        if let indexPath = tableView.indexPath(for: cell) {
+            let track = searchResults[(indexPath as NSIndexPath).row]
+            cancelDownload(track)
+            tableView.reloadRows(at: [IndexPath(row: (indexPath as NSIndexPath).row, section: 0)], with: .none)
+        }
+    }
+    
+    func downloadTapped(_ cell: TrackCell) {
+        if let indexPath = tableView.indexPath(for: cell) {
+            let track = searchResults[(indexPath as NSIndexPath).row]
+            startDownload(track)
+            tableView.reloadRows(at: [IndexPath(row: (indexPath as NSIndexPath).row, section: 0)], with: .none)
+        }
+    }
+}
+
+// MARK: UITableViewDataSource
+
+extension SearchViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return searchResults.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "TrackCell", for: indexPath) as!TrackCell
+        
+        // Delegate cell button tap events to this view controller
+        cell.delegate = self
+        
+        let track = searchResults[(indexPath as NSIndexPath).row]
+        
+        // Configure title and artist labels
+        cell.titleLabel.text = track.name
+        cell.artistLabel.text = track.artist
+        
+        var showDownloadControls = false
+        if let download = activeDownloads[track.previewUrl!] {
+            showDownloadControls = true
+            
+            cell.progressView.progress = download.progress
+            cell.progressLabel.text = (download.isDownloading) ? "Downloading..." : "Paused"
+            
+            let title = (download.isDownloading) ? "Pause" : "Resume"
+            cell.pauseButton.setTitle(title, for: UIControlState())
+        }
+        cell.progressView.isHidden = !showDownloadControls
+        cell.progressLabel.isHidden = !showDownloadControls
+        
+        // If the track is already downloaded, enable cell selection and hide the Download button
+        let downloaded = localFileExistsForTrack(track)
+        cell.selectionStyle = downloaded ? UITableViewCellSelectionStyle.gray : UITableViewCellSelectionStyle.none
+        cell.downloadButton.isHidden = downloaded || showDownloadControls
+        
+        cell.pauseButton.isHidden = !showDownloadControls
+        cell.cancelButton.isHidden = !showDownloadControls
+        
+        return cell
+    }
+}
+
+// MARK: UITableViewDelegate
+
+extension SearchViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 62.0
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let track = searchResults[(indexPath as NSIndexPath).row]
+        if localFileExistsForTrack(track) {
+            playDownload(track)
+        }
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+}
+
